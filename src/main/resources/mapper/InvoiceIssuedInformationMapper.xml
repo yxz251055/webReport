@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.IInvoiceIssuedInformationDao" >
+    <resultMap id="BaseResultMap" type="com.domain.InvoiceIssuedInformation" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="signingDate" property="signingDate" jdbcType="DATE" />
+        <result column="EAScode" property="easCode" jdbcType="VARCHAR" />
+        <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+        <result column="InvoiceAmount" property="InvoiceAmount" jdbcType="VARCHAR" />
+        <result column="operateId" property="operateId" jdbcType="VARCHAR" />
+        <result column="createDate" property="createDate" jdbcType="DATE" />
+        <result column="updateDate" property="updateDate" jdbcType="DATE" />
+        <result column="yn" property="yn" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, signingDate, EAScode, projectName, InvoiceAmount,
+        operateId, createDate,updateDate,yn
+    </sql>
+
+
+    <select id="getCountInvoiceIssuedInformation" resultType="long" parameterType="com.domain.InvoiceIssuedInformation" >
+        select count(1) from invoiceIssuedInformation
+        <where>
+            <if test="easCode!=null and easCode !=''">
+                and easCode = #{easCode,jdbcType=VARCHAR}
+            </if>
+            <if test="projectName!=null and projectName !=''">
+                and projectName = #{projectName,jdbcType=VARCHAR}
+            </if>
+            <if test="InvoiceAmount!=null and InvoiceAmount !=''">
+                and InvoiceAmount = #{InvoiceAmount,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate!=null and startDate !=''">
+                and createDate &gt;= #{startDate,jdbcType=VARCHAR}
+            </if>
+            <if test="endDate!=null and endDate !=''">
+                and createDate &lt;= #{endDate,jdbcType=VARCHAR}
+            </if>
+            <if test="operateId!=null and operateId !=''">
+                and operateId = #{operateId,jdbcType=VARCHAR}
+            </if>
+            and yn = 1
+        </where>
+    </select>
+    <select id="queryInvoiceIssuedInformationByPage" resultMap="BaseResultMap" parameterType="com.domain.InvoiceIssuedInformation" >
+        select
+        <include refid="Base_Column_List" />
+        from invoiceIssuedInformation
+        <where>
+            <if test="easCode!=null and easCode !=''">
+                and easCode = #{easCode,jdbcType=VARCHAR}
+            </if>
+            <if test="projectName!=null and projectName !=''">
+                and projectName = #{projectName,jdbcType=VARCHAR}
+            </if>
+            <if test="InvoiceAmount!=null and InvoiceAmount !=''">
+                and InvoiceAmount = #{InvoiceAmount,jdbcType=VARCHAR}
+            </if>
+            <if test="startDate!=null and startDate !=''">
+                and createDate &gt;= #{startDate,jdbcType=VARCHAR}
+            </if>
+            <if test="endDate!=null and endDate !=''">
+                and createDate &lt;= #{endDate,jdbcType=VARCHAR}
+            </if>
+            <if test="operateId!=null and operateId !=''">
+                and operateId = #{operateId,jdbcType=VARCHAR}
+            </if>
+            and yn = 1
+        </where>
+    </select>
+
+    <insert id="saveInvoiceIssuedInformation" parameterType="com.domain.InvoiceIssuedInformation" >
+        insert into invoiceIssuedInformation (signingDate,
+        EAScode, projectName, InvoiceAmount,
+        operateId, createDate, updateDate,yn)
+        values (#{signingDate,jdbcType=DATE},
+        #{easCode,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{InvoiceAmount,jdbcType=VARCHAR},
+        #{operateId,jdbcType=VARCHAR},now(),now(),1)
+    </insert>
+    <update id="updateInvoiceIssuedInformation" parameterType="com.domain.InvoiceIssuedInformation" >
+        update invoiceIssuedInformation
+        set signingDate = #{signingDate,jdbcType=DATE},
+        EAScode = #{easCode,jdbcType=VARCHAR},
+        projectName = #{projectName,jdbcType=VARCHAR},
+        InvoiceAmount = #{InvoiceAmount,jdbcType=VARCHAR},
+        operateId = #{operateId,jdbcType=VARCHAR},
+        updateDate = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteInvoiceIssuedInformation" parameterType="com.domain.InvoiceIssuedInformation" >
+        update invoiceIssuedInformation
+        set yn = 0,
+        operateId = #{operateId,jdbcType=VARCHAR},
+        updateDate = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.IProjectBasicDao" >
+    <resultMap id="BaseResultMap" type="com.domain.ProjectBasic" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="signingDate" property="signingDate" jdbcType="DATE" />
+        <result column="contractId" property="contractId" jdbcType="VARCHAR" />
+        <result column="EAScode" property="easCode" jdbcType="VARCHAR" />
+        <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+        <result column="contractName" property="contractName" jdbcType="VARCHAR" />
+        <result column="sectionType" property="sectionType" jdbcType="VARCHAR" />
+        <result column="PartyAName" property="partyAName" jdbcType="VARCHAR" />
+        <result column="PartyAArea" property="partyAArea" jdbcType="VARCHAR" />
+        <result column="ProjectDepartment" property="projectDepartment" jdbcType="VARCHAR" />
+        <result column="taxMethod" property="taxMethod" jdbcType="VARCHAR" />
+        <result column="invoiceType" property="invoiceType" jdbcType="VARCHAR" />
+        <result column="contractAmount" property="contractAmount" jdbcType="DOUBLE" />
+        <result column="settlementAmount" property="settlementAmount" jdbcType="DOUBLE" />
+        <result column="backPaymentConditions" property="backPaymentConditions" jdbcType="VARCHAR" />
+        <result column="dedWarrantyProportion" property="dedWarrantyProportion" jdbcType="INTEGER" />
+        <result column="warrantyStartDate" property="warrantyStartDate" jdbcType="DATE" />
+        <result column="warrantyDueDate" property="warrantyDueDate" jdbcType="DATE" />
+        <result column="projectEntryDate" property="projectEntryDate" jdbcType="DATE" />
+        <result column="projectCompletionDate" property="projectCompletionDate" jdbcType="DATE" />
+        <result column="projectSettlementDate" property="projectSettlementDate" jdbcType="DATE" />
+        <result column="operateId" property="operateId" jdbcType="VARCHAR" />
+        <result column="createDate" property="createDate" jdbcType="DATE" />
+        <result column="updateDate" property="updateDate" jdbcType="DATE" />
+        <result column="yn" property="yn" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    id, signingDate, contractId, EAScode, projectName, contractName, sectionType, PartyAName,
+    PartyAArea, ProjectDepartment, taxMethod, invoiceType, contractAmount, settlementAmount,
+    backPaymentConditions, dedWarrantyProportion, warrantyStartDate, warrantyDueDate,
+    projectEntryDate, projectCompletionDate, projectSettlementDate, operateId, createDate,
+    updateDate,yn
+  </sql>
+
+
+    <select id="getCountProjectBasic" resultType="long" parameterType="com.domain.ProjectBasic" >
+        select count(1) from project_basic
+        <where>
+            <if test="contractId!=null and contractId !=''">
+                and contractId = #{contractId,jdbcType=VARCHAR}
+            </if>
+            <if test="partyAName!=null and partyAName !=''">
+                and partyAName = #{partyAName,jdbcType=INTEGER}
+            </if>
+            <if test="contractName!=null and contractName !=''">
+                and contractName = #{contractName,jdbcType=INTEGER}
+            </if>
+            <if test="startDate!=null and startDate !=''">
+                and createDate &gt; #{startDate,jdbcType=VARCHAR}
+            </if>
+            <if test="endDate!=null and endDate !=''">
+                and createDate &lt; #{endDate,jdbcType=VARCHAR}
+            </if>
+            <if test="operateId!=null and operateId !=''">
+                and operateId = #{operateId,jdbcType=VARCHAR}
+            </if>
+            and yn = 1
+        </where>
+    </select>
+    <select id="queryProjectBasicByPage" resultMap="BaseResultMap" parameterType="com.domain.ProjectBasic" >
+        select
+        <include refid="Base_Column_List" />
+        from project_basic
+        <where>
+            <if test="contractId!=null and contractId !=''">
+                and contractId = #{contractId,jdbcType=VARCHAR}
+            </if>
+            <if test="partyAName!=null and partyAName !=''">
+                and partyAName = #{partyAName,jdbcType=INTEGER}
+            </if>
+            <if test="contractName!=null and contractName !=''">
+                and contractName = #{contractName,jdbcType=INTEGER}
+            </if>
+            <if test="startDate!=null and startDate !=''">
+                and createDate &gt; #{startDate,jdbcType=VARCHAR}
+            </if>
+            <if test="endDate!=null and endDate !=''">
+                and createDate &lt; #{endDate,jdbcType=VARCHAR}
+            </if>
+            <if test="operateId!=null and operateId !=''">
+                and operateId = #{operateId,jdbcType=VARCHAR}
+            </if>
+            and yn = 1
+        </where>
+    </select>
+
+    <insert id="saveProjectBasic" parameterType="com.domain.ProjectBasic" >
+        insert into project_basic (signingDate, contractId,
+        EAScode, projectName, contractName,
+        sectionType, PartyAName, PartyAArea,
+        ProjectDepartment, taxMethod, invoiceType,
+        contractAmount, settlementAmount, backPaymentConditions,
+        dedWarrantyProportion, warrantyStartDate,
+        warrantyDueDate, projectEntryDate, projectCompletionDate,
+        projectSettlementDate, operateId, createDate,
+        updateDate,yn)
+        values (#{signingDate,jdbcType=DATE}, #{contractId,jdbcType=VARCHAR},
+        #{easCode,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{contractName,jdbcType=VARCHAR},
+        #{sectionType,jdbcType=VARCHAR}, #{partyAName,jdbcType=VARCHAR}, #{partyAArea,jdbcType=VARCHAR},
+        #{projectDepartment,jdbcType=VARCHAR}, #{taxMethod,jdbcType=VARCHAR}, #{invoiceType,jdbcType=VARCHAR},
+        #{contractAmount,jdbcType=DOUBLE}, #{settlementAmount,jdbcType=DOUBLE}, #{backPaymentConditions,jdbcType=VARCHAR},
+        #{dedWarrantyProportion,jdbcType=INTEGER}, #{warrantyStartDate,jdbcType=DATE},
+        #{warrantyDueDate,jdbcType=DATE}, #{projectEntryDate,jdbcType=DATE}, #{projectCompletionDate,jdbcType=DATE},
+        #{projectSettlementDate,jdbcType=DATE}, #{operateId,jdbcType=VARCHAR},now(),now(),1)
+    </insert>
+    <update id="updateProjectBasic" parameterType="com.domain.ProjectBasic" >
+        update project_basic
+        set signingDate = #{signingDate,jdbcType=DATE},
+        contractId = #{contractId,jdbcType=VARCHAR},
+        EAScode = #{easCode,jdbcType=VARCHAR},
+        projectName = #{projectName,jdbcType=VARCHAR},
+        contractName = #{contractName,jdbcType=VARCHAR},
+        sectionType = #{sectionType,jdbcType=VARCHAR},
+        PartyAName = #{partyAName,jdbcType=VARCHAR},
+        PartyAArea = #{partyAArea,jdbcType=VARCHAR},
+        ProjectDepartment = #{projectDepartment,jdbcType=VARCHAR},
+        taxMethod = #{taxMethod,jdbcType=VARCHAR},
+        invoiceType = #{invoiceType,jdbcType=VARCHAR},
+        contractAmount = #{contractAmount,jdbcType=DOUBLE},
+        settlementAmount = #{settlementAmount,jdbcType=DOUBLE},
+        backPaymentConditions = #{backPaymentConditions,jdbcType=VARCHAR},
+        dedWarrantyProportion = #{dedWarrantyProportion,jdbcType=INTEGER},
+        warrantyStartDate = #{warrantyStartDate,jdbcType=DATE},
+        warrantyDueDate = #{warrantyDueDate,jdbcType=DATE},
+        projectEntryDate = #{projectEntryDate,jdbcType=DATE},
+        projectCompletionDate = #{projectCompletionDate,jdbcType=DATE},
+        projectSettlementDate = #{projectSettlementDate,jdbcType=DATE},
+        operateId = #{operateId,jdbcType=VARCHAR},
+        updateDate = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteProjectBasic" parameterType="com.domain.ProjectBasic" >
+        update project_basic
+        set yn = 0,
+        operateId = #{operateId,jdbcType=VARCHAR},
+        updateDate = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

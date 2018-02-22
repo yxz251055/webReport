@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dao.IProjectNodeDao" >
+    <resultMap id="BaseResultMap" type="com.domain.ProjectNode" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="signingDate" property="signingDate" jdbcType="DATE" />
+        <result column="EAScode" property="easCode" jdbcType="VARCHAR" />
+        <result column="projectName" property="projectName" jdbcType="VARCHAR" />
+        <result column="contractId" property="contractId" jdbcType="VARCHAR" />
+        <result column="contractName" property="contractName" jdbcType="VARCHAR" />
+        <result column="ProjectDepartment" property="projectDepartment" jdbcType="VARCHAR" />
+        <result column="completionProgress" property="completionProgress" jdbcType="VARCHAR" />
+        <result column="completionPercentage" property="completionPercentage" jdbcType="VARCHAR" />
+        <result column="openedAmountPercentage" property="openedAmountPercentage" jdbcType="VARCHAR" />
+        <result column="backPaymentPercentage" property="backPaymentPercentage" jdbcType="VARCHAR" />
+        <result column="operateId" property="operateId" jdbcType="VARCHAR" />
+        <result column="createDate" property="createDate" jdbcType="DATE" />
+        <result column="updateDate" property="updateDate" jdbcType="DATE" />
+        <result column="yn" property="yn" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, signingDate, contractId, EAScode, projectName, contractName, ProjectDepartment,
+        completionProgress, completionPercentage,openedAmountPercentage, backPaymentPercentage,
+        operateId, createDate,updateDate,yn
+    </sql>
+
+
+    <select id="getCountProjectNode" resultType="long" parameterType="com.domain.ProjectNode" >
+        select count(1) from project_node
+        <where>
+            <if test="contractId!=null and contractId !=''">
+                and contractId = #{contractId,jdbcType=VARCHAR}
+            </if>
+            <if test="easCode!=null and easCode !=''">
+                and easCode = #{easCode,jdbcType=INTEGER}
+            </if>
+            <if test="projectDepartment!=null and projectDepartment !=''">
+                and projectDepartment = #{projectDepartment,jdbcType=INTEGER}
+            </if>
+            <if test="startDate!=null and startDate !=''">
+                and createDate &gt; #{startDate,jdbcType=VARCHAR}
+            </if>
+            <if test="endDate!=null and endDate !=''">
+                and createDate &lt; #{endDate,jdbcType=VARCHAR}
+            </if>
+            <if test="operateId!=null and operateId !=''">
+                and operateId = #{operateId,jdbcType=VARCHAR}
+            </if>
+            and yn = 1
+        </where>
+    </select>
+    <select id="queryProjectNodeByPage" resultMap="BaseResultMap" parameterType="com.domain.ProjectNode" >
+        select
+        <include refid="Base_Column_List" />
+        from project_node
+        <where>
+            <if test="contractId!=null and contractId !=''">
+                and contractId = #{contractId,jdbcType=VARCHAR}
+            </if>
+            <if test="easCode!=null and easCode !=''">
+                and easCode = #{easCode,jdbcType=INTEGER}
+            </if>
+            <if test="projectDepartment!=null and projectDepartment !=''">
+                and projectDepartment = #{projectDepartment,jdbcType=INTEGER}
+            </if>
+            <if test="startDate!=null and startDate !=''">
+                and createDate &gt; #{startDate,jdbcType=VARCHAR}
+            </if>
+            <if test="endDate!=null and endDate !=''">
+                and createDate &lt; #{endDate,jdbcType=VARCHAR}
+            </if>
+            <if test="operateId!=null and operateId !=''">
+                and operateId = #{operateId,jdbcType=VARCHAR}
+            </if>
+            and yn = 1
+        </where>
+    </select>
+    <insert id="saveProjectNode" parameterType="com.domain.ProjectNode" >
+        insert into project_node (signingDate,EAScode,
+        projectName,ProjectDepartment,
+        contractId,contractName,
+        completionProgress, completionPercentage,
+        openedAmountPercentage, backPaymentPercentage,
+        operateId, createDate,  updateDate,yn)
+        values (#{signingDate,jdbcType=DATE}, #{easCode,jdbcType=VARCHAR},
+        #{projectName,jdbcType=VARCHAR},#{projectDepartment,jdbcType=VARCHAR},
+        #{contractId,jdbcType=VARCHAR},#{contractName,jdbcType=VARCHAR},
+        #{completionProgress,jdbcType=VARCHAR}, #{completionPercentage,jdbcType=VARCHAR},
+        #{openedAmountPercentage,jdbcType=VARCHAR}, #{backPaymentPercentage,jdbcType=VARCHAR},
+        #{operateId,jdbcType=VARCHAR},now(),now(),1)
+    </insert>
+    <update id="updateProjectNode" parameterType="com.domain.ProjectNode" >
+        update project_node
+        set signingDate = #{signingDate,jdbcType=DATE},
+        contractId = #{contractId,jdbcType=VARCHAR},
+        EAScode = #{easCode,jdbcType=VARCHAR},
+        projectName = #{projectName,jdbcType=VARCHAR},
+        contractName = #{contractName,jdbcType=VARCHAR},
+        ProjectDepartment = #{projectDepartment,jdbcType=VARCHAR},
+        completionProgress = #{completionProgress,jdbcType=VARCHAR},
+        completionPercentage = #{completionPercentage,jdbcType=VARCHAR},
+        openedAmountPercentage = #{openedAmountPercentage,jdbcType=VARCHAR},
+        backPaymentPercentage = #{backPaymentPercentage,jdbcType=VARCHAR},
+        operateId = #{operateId,jdbcType=VARCHAR},
+        updateDate = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteProjectNode" parameterType="com.domain.ProjectNode" >
+        update project_node
+        set yn = 0,
+        operateId = #{operateId,jdbcType=VARCHAR},
+        updateDate = now()
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>
